@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -16,33 +15,15 @@ export const unstable_settings = {
 function RootLayoutContent() {
   const colorScheme = useColorScheme();
   const { isLoading, userToken } = useAuth();
-  const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
-  const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true);
 
-  useEffect(() => {
-    const checkOnboarding = async () => {
-      try {
-        const value = await AsyncStorage.getItem('hasSeenOnboarding');
-        setHasSeenOnboarding(value === 'true');
-      } catch (error) {
-        console.error('Error checking onboarding status:', error);
-      } finally {
-        setIsCheckingOnboarding(false);
-      }
-    };
-    checkOnboarding();
-  }, []);
-
-  if (isCheckingOnboarding || isLoading) {
+  if (isLoading) {
     return null; // Loading screen
   }
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        {!hasSeenOnboarding ? (
-          <Stack.Screen name="onboarding/index" options={{ headerShown: false }} />
-        ) : userToken ? (
+        {userToken ? (
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         ) : (
           <Stack.Screen name="auth/login" options={{ headerShown: false }} />
@@ -54,6 +35,10 @@ function RootLayoutContent() {
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         <Stack.Screen name="product/[id]" options={{ title: 'Product Details', headerShown: true }} />
         <Stack.Screen name="checkout" options={{ title: 'Checkout', headerShown: true }} />
+        <Stack.Screen name="order-details/[id]" options={{ title: 'Order Details', headerShown: true }} />
+        <Stack.Screen name="profile/edit-profile" options={{ title: 'Edit Profile', headerShown: true }} />
+        <Stack.Screen name="profile/addresses" options={{ title: 'Addresses', headerShown: true }} />
+        <Stack.Screen name="profile/settings" options={{ title: 'Settings', headerShown: true }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

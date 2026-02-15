@@ -49,6 +49,41 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const { user } = useAuth();
 
+  // Load cart from AsyncStorage on mount or user change
+  useEffect(() => {
+    const loadCart = async () => {
+      if (!user) {
+        setItems([]);
+        return;
+      }
+      try {
+        const cartData = await AsyncStorage.getItem(`cart-${user.id}`);
+        if (cartData) {
+          setItems(JSON.parse(cartData));
+        } else {
+          setItems([]);
+        }
+      } catch (error) {
+        console.error('Error loading cart:', error);
+        setItems([]);
+      }
+    };
+    loadCart();
+  }, [user]);
+
+  // Save cart to AsyncStorage whenever items change
+  useEffect(() => {
+    const saveCart = async () => {
+      if (!user) return;
+      try {
+        await AsyncStorage.setItem(`cart-${user.id}`, JSON.stringify(items));
+      } catch (error) {
+        console.error('Error saving cart:', error);
+      }
+    };
+    saveCart();
+  }, [items, user]);
+
   const addToCart = (item: Omit<CartItem, 'qty'>, qty = 1) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
