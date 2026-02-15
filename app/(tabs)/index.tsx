@@ -42,8 +42,15 @@ export default function HomeScreen() {
 
 
 
-  // Just For You: Mix of products
-  const justForYouProducts = filteredProducts.slice(0, 10);
+  // Just For You: Mix of products - show all or filtered products
+  const justForYouProducts = useMemo(() => {
+    if (selectedCategory.name === 'All') {
+      // Mix products from all categories for more variety
+      const shuffled = [...PRODUCTS].sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 16); // Show up to 16 products
+    }
+    return filteredProducts;
+  }, [selectedCategory, filteredProducts]);
 
   const onSubmitSearch = () => {
     if (search.trim().length === 0) return;
