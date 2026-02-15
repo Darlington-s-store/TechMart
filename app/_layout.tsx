@@ -15,6 +15,7 @@ export const unstable_settings = {
 
 function RootLayoutContent() {
   const colorScheme = useColorScheme();
+  const { isLoading, userToken } = useAuth();
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState<boolean | null>(null);
   const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(true);
 
@@ -32,7 +33,7 @@ function RootLayoutContent() {
     checkOnboarding();
   }, []);
 
-  if (isCheckingOnboarding) {
+  if (isCheckingOnboarding || isLoading) {
     return null; // Loading screen
   }
 
@@ -41,12 +42,18 @@ function RootLayoutContent() {
       <Stack>
         {!hasSeenOnboarding ? (
           <Stack.Screen name="onboarding/index" options={{ headerShown: false }} />
-        ) : (
+        ) : userToken ? (
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        ) : (
+          <Stack.Screen name="auth/login" options={{ headerShown: false }} />
         )}
         <Stack.Screen name="auth" options={{ headerShown: false, presentation: 'modal' }} />
+        <Stack.Screen name="auth/login" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/signup" options={{ headerShown: false }} />
+        <Stack.Screen name="auth/forgot-password" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         <Stack.Screen name="product/[id]" options={{ title: 'Product Details', headerShown: true }} />
+        <Stack.Screen name="checkout" options={{ title: 'Checkout', headerShown: true }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

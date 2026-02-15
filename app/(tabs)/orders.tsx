@@ -1,42 +1,19 @@
-import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Stack } from 'expo-router';
+import { View, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
+import { useEffect } from 'react';
 
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
+import { useOrders } from '@/hooks/use-cart';
 
 export default function OrdersScreen() {
   const colorScheme = useColorScheme();
   const themeColors = Colors[colorScheme ?? 'light'];
-
-  const orders = [
-    {
-      id: '1',
-      orderNumber: 'ORD-001',
-      date: '2024-02-10',
-      total: 2999.99,
-      status: 'Delivered',
-      items: 2,
-    },
-    {
-      id: '2',
-      orderNumber: 'ORD-002',
-      date: '2024-02-05',
-      total: 499.99,
-      status: 'In Transit',
-      items: 1,
-    },
-    {
-      id: '3',
-      orderNumber: 'ORD-003',
-      date: '2024-01-28',
-      total: 1299.99,
-      status: 'Processing',
-      items: 1,
-    },
-  ];
+  const { orders, loading } = useOrders();
+  const router = useRouter();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -51,6 +28,14 @@ export default function OrdersScreen() {
     }
   };
 
+  if (loading) {
+    return (
+      <ThemedView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={themeColors.brand.primary} />
+      </ThemedView>
+    );
+  }
+
   return (
     <ThemedView style={{ flex: 1 }}>
       <Stack.Screen options={{ title: 'My Orders', headerShown: true }} />
@@ -61,12 +46,13 @@ export default function OrdersScreen() {
             <TouchableOpacity
               key={order.id}
               style={[styles.orderCard, { borderColor: '#e0e0e0' }]}
+              onPress={() => router.push(`/order-details/${order.id}`)}
             >
               <View style={styles.orderHeader}>
                 <View>
                   <ThemedText type="defaultSemiBold">{order.orderNumber}</ThemedText>
                   <ThemedText style={{ fontSize: 12, marginTop: 4, opacity: 0.6 }}>
-                    {order.date}
+                    {new Date(order.date).toLocaleDateString()}
                   </ThemedText>
                 </View>
                 <ThemedText
@@ -82,7 +68,7 @@ export default function OrdersScreen() {
               <View style={styles.orderDetail}>
                 <View>
                   <ThemedText style={{ fontSize: 12, opacity: 0.6 }}>Items</ThemedText>
-                  <ThemedText type="defaultSemiBold">{order.items}</ThemedText>
+                  <ThemedText type="defaultSemiBold">{order.items.length}</ThemedText>
                 </View>
                 <View>
                   <ThemedText style={{ fontSize: 12, opacity: 0.6 }}>Total</ThemedText>
@@ -98,6 +84,12 @@ export default function OrdersScreen() {
           <View style={styles.emptyState}>
             <IconSymbol name="bag" size={48} color="#ccc" />
             <ThemedText style={{ marginTop: 16 }}>No orders yet</ThemedText>
+            <TouchableOpacity
+              style={styles.shopButton}
+              onPress={() => router.push('/(tabs)/explore')}
+            >
+              <ThemedText style={{ color: '#FF6600', fontWeight: '600' }}>Start Shopping</ThemedText>
+            </TouchableOpacity>
           </View>
         )}
       </ScrollView>
@@ -108,6 +100,7 @@ export default function OrdersScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    flexGrow: 1,
   },
   orderCard: {
     borderWidth: 1,
@@ -148,5 +141,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 60,
+  },
+  shopButton: {
+    marginTop: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#FF6600',
   },
 });
