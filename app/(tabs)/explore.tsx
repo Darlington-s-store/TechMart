@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/themed-text';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { PRODUCTS } from '@/constants/dummy-data';
 import { ProductCard } from '@/components/ui/product-card';
+import { AppHeader } from '@/components/app-header';
 
 
 if (
@@ -169,26 +170,12 @@ export default function ExploreScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
 
       {/* 1. Top Header */}
-      <View style={styles.header}>
-        <View style={styles.searchContainer}>
-          <IconSymbol name="magnifyingglass" size={18} color="#666" style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search..."
-            placeholderTextColor="#999"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <IconSymbol name="xmark.circle.fill" size={16} color="#999" />
-            </TouchableOpacity>
-          )}
-        </View>
-        <TouchableOpacity style={styles.cartButton}>
-          <IconSymbol name="cart" size={24} color="#333" />
-        </TouchableOpacity>
-      </View>
+      <AppHeader
+        showSearch={true}
+        showNotification={true}
+        onSearchChange={setSearchQuery}
+        searchPlaceholder="Search products..."
+      />
 
       <View style={styles.contentContainer}>
 

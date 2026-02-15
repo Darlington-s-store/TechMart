@@ -8,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useCart } from '@/hooks/use-cart';
 import { useAuth } from '@/hooks/use-auth';
+import { AppHeader } from '@/components/app-header';
 
 export default function CartScreen() {
   const { items, totalPrice, removeFromCart, updateQuantity, clearCart } = useCart();
@@ -78,14 +79,7 @@ export default function CartScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* Header */}
-      <View style={styles.header}>
-        <ThemedText style={styles.headerTitle}>My Cart</ThemedText>
-        {items.length > 0 && (
-          <TouchableOpacity onPress={clearCart}>
-            <ThemedText style={styles.clearText}>Clear All</ThemedText>
-          </TouchableOpacity>
-        )}
-      </View>
+      <AppHeader title="My Cart" showNotification={true} />
 
       <FlatList
         data={items}
@@ -149,26 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#333',
-  },
-  clearText: {
-    color: '#FF3B30',
-    fontSize: 14,
-    fontWeight: '600',
-  },
+
   listContent: {
     padding: 16,
     paddingBottom: 200, // Space for footer

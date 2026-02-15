@@ -10,6 +10,7 @@ import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/hooks/use-auth';
 import { useOrders } from '@/hooks/use-cart';
+import { AppHeader } from '@/components/app-header';
 
 export default function ProfileScreen() {
     const router = useRouter();
@@ -40,6 +41,9 @@ export default function ProfileScreen() {
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
+            {/* Top Header */}
+            <AppHeader title="Profile" showNotification={false} />
+            
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 {/* Profile Header Card */}
                 <View style={styles.headerCard}>

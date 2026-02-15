@@ -8,6 +8,8 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 import { useOrders } from '@/hooks/use-cart';
+import { AppHeader } from '@/components/app-header';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function OrdersScreen() {
   const colorScheme = useColorScheme();
@@ -37,8 +39,11 @@ export default function OrdersScreen() {
   }
 
   return (
-    <ThemedView style={{ flex: 1 }}>
-      <Stack.Screen options={{ title: 'My Orders', headerShown: true }} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} edges={['top']}>
+      <Stack.Screen options={{ headerShown: false }} />
+
+      {/* Header */}
+      <AppHeader title="My Orders" showNotification={true} />
 
       <ScrollView contentContainerStyle={styles.container}>
         {orders.length > 0 ? (
@@ -93,7 +98,7 @@ export default function OrdersScreen() {
           </View>
         )}
       </ScrollView>
-    </ThemedView>
+    </SafeAreaView>
   );
 }
 

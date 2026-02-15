@@ -71,19 +71,14 @@ export default function ProductDetailsScreen() {
                 </TouchableOpacity>
 
                 <View style={styles.headerActions}>
+                    <TouchableOpacity style={styles.roundButton}>
+                        <IconSymbol name="heart" size={20} color="#000" />
+                    </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.roundButton}
-                        onPress={() => router.push('/cart')}
+                        onPress={() => router.push('/(tabs)/profile')}
                     >
-                        <IconSymbol name="cart" size={20} color="#000" />
-                        {totalItems > 0 && (
-                            <View style={styles.cartBadge}>
-                                <ThemedText style={styles.cartBadgeText}>{totalItems}</ThemedText>
-                            </View>
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.roundButton}>
-                        <IconSymbol name="square.and.arrow.up" size={20} color="#000" />
+                        <IconSymbol name="bell.fill" size={20} color="#000" />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -347,24 +342,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 4,
     },
-    cartBadge: {
-        position: 'absolute',
-        top: -2,
-        right: -2,
-        backgroundColor: '#FF4500',
-        minWidth: 18,
-        height: 18,
-        borderRadius: 9,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 2,
-        borderColor: '#fff',
-    },
-    cartBadgeText: {
-        color: '#fff',
-        fontSize: 9,
-        fontWeight: 'bold',
-    },
+
 
     // Gallery
     galleryContainer: {

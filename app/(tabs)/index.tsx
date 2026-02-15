@@ -9,6 +9,7 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import { PRODUCTS } from '@/constants/dummy-data';
 import { ProductCard } from '@/components/ui/product-card';
 import { useCart } from '@/hooks/use-cart';
+import { AppHeader } from '@/components/app-header';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -50,41 +51,23 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Search-Centric Header */}
-      <View style={styles.header}>
-        <View style={styles.searchRow}>
-          <View style={styles.searchBar}>
-            <IconSymbol name="magnifyingglass" size={18} color="#666" />
-            <TextInput
-              placeholder="Search..."
-              placeholderTextColor="#999"
-              value={search}
-              onChangeText={setSearch}
-              onSubmitEditing={onSubmitSearch}
-              returnKeyType="search"
-              style={styles.searchInput}
-            />
-            <TouchableOpacity style={styles.cameraBtn}>
-              <IconSymbol name="camera.fill" size={16} color="#666" />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.cartHeaderBtn}>
-            <IconSymbol name="cart" size={24} color="#333" />
-            {totalItems > 0 && (
-              <View style={styles.headerBadge}><ThemedText style={styles.headerBadgeText}>{totalItems}</ThemedText></View>
-            )}
-          </TouchableOpacity>
-        </View>
+      {/* App Header */}
+      <AppHeader
+        showSearch={true}
+        showNotification={true}
+        onSearchChange={setSearch}
+        searchPlaceholder="Search products..."
+      />
 
-        {/* Categories (High Density & Stacked) */}
+      {/* Categories Horizontal Scroll */}
+      <View style={styles.categoryWrapper}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoryList}
-          style={{ maxHeight: 60 }}
         >
           {categories.map((cat, index) => {
             const isActive = selectedCategory.name === cat.name;
@@ -145,11 +128,16 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: {
+  categoryWrapper: {
     backgroundColor: '#fff',
-    paddingTop: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
+  },
+  categoryList: {
+    gap: 8,
+    paddingVertical: 0,
   },
   searchRow: {
     flexDirection: 'row',
